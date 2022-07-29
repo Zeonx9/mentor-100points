@@ -1,3 +1,5 @@
+# задача 8.2
+
 from itertools import product
 
 # словари содержащие номера букв в словах
