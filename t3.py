@@ -3,17 +3,16 @@
 from itertools import product
 
 codes = []
-for length in range(2, 7):  # для длин кодов от 2 до 7 т.к меньше не подходит по условию а больше не получится т.к. всего 6 различных букв
+
+for length in range(2, 7):
     for x in product('ЛУЧШАЯ', repeat=length):   # состовляем все кобинации нужной длины из исходного набора
-        if len(set(x)) == length:      # если повторов нет: т.е. число различных символов совпадает с длиной выборки, то нам подходит
-            codes.append(''.join(x))            # добавляем в список
+        # проверка на повторы
+        if len(set(x)) == length:
+            codes.append(x)
 
-codes_with_digit = []  # добавим цифру на конец каждого полученного буквенного кода, для этого организуем два цикла
-for c in codes:
-    for digit in '0123456789':
-        codes_with_digit.append(c + digit)
 
-print(len(codes_with_digit))  # количество умножаем на 10 т.к. после каждого полученого кода можно поставить 10 различных цифр
+# количество умножаем на 10
+print(len(codes) * 10)
 
 
 
