@@ -51,3 +51,6 @@ elif req == 'student':
     stud = ordered_ids.index(int(input('Paste the id: ')))
     prnt_str = '\t'.join(map(lambda x: str(x) if x > 0 else ' ', grouped_data[stud]))
     print(prnt_str)
+
+else:
+    print('NO SUCH REQUEST')

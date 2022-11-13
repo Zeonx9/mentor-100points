@@ -19,12 +19,12 @@ for row in raw_data:
         tasks_dict[row.task] = len(tasks_dict)
 
 
-data = [[0] * len(tasks_dict) for _ in range(len(ordered_names))]
+data = [[-1] * len(tasks_dict) for _ in range(len(ordered_names))]
 for i, name in enumerate(ordered_names):
     if name not in people_dict:
         continue
 
-    for k, t in enumerate(tasks_dict):
+    for t, k in tasks_dict.items():
         if t in people_dict[name]:
             data[i][k] = people_dict[name][t]
 
@@ -41,4 +41,4 @@ indices = [tup[0] for tup in columns]
 
 print(*[' '.join(c[1]) for c in columns])
 for i in range(len(ordered_names)):
-    print('\t'.join(map(lambda e: str(e) if e > 0 else ' ', [data[i][j] for j in indices])))
+    print('\t'.join(map(lambda e: ' ' if e < 0 else str(e), [data[i][j] for j in indices])))
