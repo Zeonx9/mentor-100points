@@ -39,6 +39,15 @@ for i, key in enumerate(ordered_ids):
         continue
     grouped_data[i] = [sum(data[key].scores[st:st + count]) for st, count in sorted(short_headers.values())]
 
+
+def webinar(n):
+    if n < 17:
+        return 3 * (n - 11), 3
+    if 17 <= n <= 18:
+        return 2 * (n - 17) + 18, 2
+    return 3 * (n - 19) + 22, 3
+
+
 req = input("Enter\n"
             "'task' to print marks for the task or\n"
             "'student' to print all marks of that student\n"
@@ -46,7 +55,7 @@ req = input("Enter\n"
 if req == 'task':
     web_num = int(input('Enter webinar number: '))
     while web_num >= 0:
-        web_st, web_c = ((web_num - 11) * 3, 3) if web_num < 17 else (18 + (web_num - 17) * 2, 2)
+        web_st, web_c = webinar(web_num)
         print(*list(short_headers.keys())[web_st:web_st + web_c])
         for i, idd in enumerate(ordered_ids):
             prnt_str = '\t'.join(map(lambda x: str(x) if x > 0 else ' ', grouped_data[i][web_st:web_st + web_c]))
