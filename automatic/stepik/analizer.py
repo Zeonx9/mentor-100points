@@ -45,7 +45,9 @@ def webinar(n):
         return 3 * (n - 11), 3
     if 17 <= n <= 18:
         return 2 * (n - 17) + 18, 2
-    return 3 * (n - 19) + 22, 3
+    if n == 19:
+        return 0, 0
+    return 3 * (n - 20) + 22, 3
 
 
 req = input("Enter\n"

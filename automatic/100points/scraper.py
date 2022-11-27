@@ -6,6 +6,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 def log_to_site(mail, password):
     driver = webdriver.Chrome()
+    driver.maximize_window()
     driver.get('https://api.100points.ru/login')
     driver.implicitly_wait(30)
 
@@ -28,7 +29,10 @@ def get_data_from_cur_page(driver, write_to):
 
     for i in range(1, row_count + 1):
         # go to view page
-        driver.find_element(By.XPATH, f'//table//tr[{i}]/td/a').click()
+        view = WebDriverWait(driver, 10).until(
+            ec.element_to_be_clickable((By.XPATH, f'//table//tr[{i}]/td/a'))
+        )
+        view.click()
         # select a mark of student
         element_mark = WebDriverWait(driver, 10).until(
             ec.presence_of_element_located((By.XPATH, '//div[@class="card-body"]/div/div[6]/div'))
