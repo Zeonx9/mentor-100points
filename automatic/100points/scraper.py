@@ -46,7 +46,11 @@ def get_data_from_cur_page(driver, write_to):
             ec.presence_of_element_located((By.XPATH, f'//table//tr[{i}]/td[3]/div[1]'))
         )
         name = element_name.text
-        task = driver.find_element(By.XPATH, f'//table//tr[{i}]/td[4]/div[1]/small/b').text.split(".")[0]
+        full_task = driver.find_element(By.XPATH, f'//table//tr[{i}]/td[4]/div[1]/small/b').text.split(".")
+        if 'тренировка' in full_task[1]:
+            print(full_task[1])
+            continue
+        task = full_task[0]
         level = driver.find_element(By.XPATH, f'//table//tr[{i}]/td[4]/div[4]/small/b').text.split()[0]
         # save the data
         write_to.append(','.join([name, task + ' ' + level, mark]) + '\n')
