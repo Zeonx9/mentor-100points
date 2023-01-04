@@ -50,11 +50,7 @@ def webinar(n):
     return 3 * (n - 20) + 22, 3
 
 
-req = input("Enter\n"
-            "'task' to print marks for the task or\n"
-            "'student' to print all marks of that student\n"
-            "'all' to print out everything:\n")
-if req == 'task':
+def task_request():
     web_num = int(input('Enter webinar number: '))
     while web_num >= 0:
         web_st, web_c = webinar(web_num)
@@ -64,7 +60,8 @@ if req == 'task':
             print(prnt_str)
         web_num = int(input('Enter next webinar number: '))
 
-elif req == 'student':
+
+def student_request():
     stud = int(input('Paste the id: '))
     while stud in ordered_ids:
         stud = ordered_ids.index(stud)
@@ -72,9 +69,15 @@ elif req == 'student':
         print(prnt_str)
         stud = int(input('Paste next the id: '))
 
-elif req == 'all':
-    for i in range(len(ordered_ids)):
-        prnt_str = '\t'.join(map(lambda x: str(x) if x > 0 else ' ', grouped_data[i]))
-        print(prnt_str)
-else:
-    print('NO SUCH REQUEST')
+
+if __name__ == "__main__":
+    req = input("Enter\n"
+                "'task' to print marks for the task or\n"
+                "'student' to print all marks of that student\n")
+
+    if req == 'task':
+        task_request()
+    elif req == 'student':
+        student_request()
+    else:
+        print('NO SUCH REQUEST')

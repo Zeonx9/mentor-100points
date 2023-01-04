@@ -37,7 +37,7 @@ def get_data_from_cur_page(driver, write_to):
         element_mark = WebDriverWait(driver, 10).until(
             ec.presence_of_element_located((By.XPATH, '//div[@class="card-body"]/div/div[6]/div'))
         )
-        mark = element_mark.text.split()[-1].split("/")[0]
+        mark, max_mark = element_mark.text.split()[-1].split("/")
         # return to the previous page
         driver.back()
 
@@ -46,14 +46,14 @@ def get_data_from_cur_page(driver, write_to):
             ec.presence_of_element_located((By.XPATH, f'//table//tr[{i}]/td[3]/div[1]'))
         )
         name = element_name.text
-        full_task = driver.find_element(By.XPATH, f'//table//tr[{i}]/td[4]/div[1]/small/b').text.split(".")
-        if 'тренировка' in full_task[1]:
-            print(full_task[1])
+        full_task = driver.find_element(By.XPATH, f'//table//tr[{i}]/td[4]/div[1]/small/b').text
+        if 'тренировка' in full_task:
+            print(full_task)
             continue
-        task = full_task[0]
+        task = full_task.split(".")[0]
         level = driver.find_element(By.XPATH, f'//table//tr[{i}]/td[4]/div[4]/small/b').text.split()[0]
         # save the data
-        write_to.append(','.join([name, task + ' ' + level, mark]) + '\n')
+        write_to.append(','.join([name, task + ' ' + level, mark, max_mark]) + '\n')
 
     # # print retrieved data
     # print(*write_to[-row_count:], sep='', end='')
@@ -67,36 +67,41 @@ def go_to_next_page(driver):
     return True
 
 
-to_do = input("Enter 'create' to generate data, or 'update' to append new data: ")
-dr = log_to_site("tema_mushtukov@100points.ru", "mushtukov.artyom")
-if to_do == 'create':
-    extracted_data = []
-    while True:
-        get_data_from_cur_page(dr, extracted_data)
-        if not go_to_next_page(dr):
-            break
+def main_routine(req: str):
+    dr = log_to_site("tema_mushtukov@100points.ru", "mushtukov.artyom")
+    if req == 'create':
+        extracted_data = []
+        while True:
+            get_data_from_cur_page(dr, extracted_data)
+            if not go_to_next_page(dr):
+                break
 
-    with open("data.csv", "w", encoding="UTF-8") as file:
-        file.writelines(extracted_data)
+        with open("data.csv", "w", encoding="UTF-8") as file:
+            file.writelines(extracted_data)
 
-elif to_do == 'update':
-    with open("data.csv", "r", encoding="UTF-8") as file:
-        prev_data = file.readlines()
+    elif req == 'update':
+        with open("data.csv", "r", encoding="UTF-8") as file:
+            prev_data = file.readlines()
 
-    new_lines = []
-    while True:
-        page_data = []
-        get_data_from_cur_page(dr, page_data)
-        count = len(new_lines) + len(page_data)
-        new_lines += [s for s in page_data if s not in prev_data]
-        print(count, len(new_lines))
+        new_lines = []
+        while True:
+            page_data = []
+            get_data_from_cur_page(dr, page_data)
+            count = len(new_lines) + len(page_data)
+            new_lines += [s for s in page_data if s not in prev_data]
+            print(count, len(new_lines))
 
-        if count - len(new_lines) > 4:
-            break
-        go_to_next_page(dr)
+            if count - len(new_lines) > 4:
+                break
+            go_to_next_page(dr)
 
-    prev_data = new_lines + prev_data
-    with open("data.csv", "w", encoding="UTF-8") as file:
-        file.writelines(prev_data)
+        prev_data = new_lines + prev_data
+        with open("data.csv", "w", encoding="UTF-8") as file:
+            file.writelines(prev_data)
+    dr.close()
 
-dr.close()
+
+if __name__ == "__main__":
+    to_do = input("Enter 'create' to generate data, or 'update' to append new data: ")
+    main_routine(to_do)
+
