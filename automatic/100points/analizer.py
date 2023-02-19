@@ -46,8 +46,7 @@ def get_slice_indices(tasks_dict, max_scores, web_name):
     return names, indices, maximums
 
 
-def print_home_work_result(web_name):
-    data, ordered_names, tasks_dict, max_scores = sort_and_analyze_data()
+def print_home_work_result(web_name, data, ordered_names, tasks_dict, max_scores):
     names, indices, maximums = get_slice_indices(tasks_dict, max_scores, web_name)
 
     print(*names)
@@ -81,7 +80,8 @@ if __name__ == "__main__":
     if should_update == "yes" or should_update == "y":
         scrape("update")
 
+    all_data = sort_and_analyze_data()
     web = input('Enter webinar number: ')
-    print_home_work_result(web)
-
-    prepare_output_for_parser(f"out_data_{web}.csv", web)
+    while web != '':
+        print_home_work_result(web, *all_data)
+        web = input('Enter webinar number: ')

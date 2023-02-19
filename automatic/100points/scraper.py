@@ -35,7 +35,7 @@ def get_data_from_cur_page(driver, write_to):
         view.click()
         # select a mark of student
         element_mark = WebDriverWait(driver, 10).until(
-            ec.presence_of_element_located((By.XPATH, '//div[@class="card-body"]/div/div[6]/div'))
+            ec.presence_of_element_located((By.XPATH, '//div[@class="card-body"]/div/div[6]/div[2]'))
         )
         mark, max_mark = element_mark.text.split()[-1].split("/")
         # return to the previous page
@@ -71,8 +71,11 @@ def main_routine(req: str):
     dr = log_to_site("tema_mushtukov@100points.ru", "mushtukov.artyom")
     if req == 'create':
         extracted_data = []
+        counter = 0
         while True:
             get_data_from_cur_page(dr, extracted_data)
+            print(counter)
+            counter += 15
             if not go_to_next_page(dr):
                 break
 
